@@ -25,17 +25,3 @@ License
 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Contributors
-============
-
- - Ahiya Mohammed <Ahiya.Mohammed@imgtec.com>
- - Viswanathareddy Settipalli <Viswanathareddy.Settipalli@imgtec.com>
- - Raja Chegondi <Raja.Chegondi@imgtec.com>
- - Surender Sanke <surender.sanke@imgtec.com>
- - Janibasha Shaik <janibasha.shaik@imgtec.com>
- - Chris Dewbery <christopher.dewbery@imgtec.com>
- - Sean Kelly <sean.kelly@imgtec.com>
- - David Antliff <david.antliff@imgtec.com>
- - Roland Bewick <roland.bewick@imgtec.com>
- - Hayden Brown <hayden.brown@imgtec.com>
-
