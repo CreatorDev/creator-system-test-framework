@@ -1,17 +1,13 @@
-       _____
-     / ___  \_______    /|                                      _
-    / /    |  ____  |  | |  _ __ ___   __ _  __ _ _ _ __   __ _| |_ _  ___  _ __
-    \ \____| |    | |  | | | '_ ` _ \ / _` |/ _` | | '_ \ / _` | __| |/ _ \| '_ \
-     \____,| |____| |  | | | | | | | | (_| | (_| | | | | | (_| | |_| | (_) | | | |
-           |________|  |_| |_| |_| |_|\__,_|\__, |_|_| |_|\__,_|\__|_|\___/|_| |_|
-                                             __/ |
-                                            |___/        Technologies
+![Imagination Technologies Limited logo](doc/images/img.png)
 
-Creator System Test Framework
-=============================
+----
 
-License
-========
+## Creator System Test Framework
+
+----
+
+### License
+
  Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies.
  All rights reserved.
 
@@ -25,7 +21,7 @@ License
 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
+----
 
 ### Credits
 
@@ -37,4 +33,3 @@ We would also like to acknowledge and thank the authors of the following project
 * TestLink : https://sourceforge.net/projects/testlink
 * Nose : http://nose.readthedocs.io
 * AwaLWM2M : https://github.com/FlowM2M/AwaLWM2M
-
