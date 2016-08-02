@@ -7,8 +7,8 @@
                                              __/ |
                                             |___/        Technologies
 
-Device Management End-to-End Test Framework
-===========================================================
+Creator System Test Framework
+=============================
 
 License
 ========
