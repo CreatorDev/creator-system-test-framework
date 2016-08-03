@@ -11,7 +11,7 @@ GW_IP=$1
 echo "Gateway IP address: $GW_IP"
 
 echo "Configuring network on gateway device..."
-cd /mnt/qa/DeviceManagementTests
+cd /mnt/qa/creator-system-test-framework
 (cd hardware && ash setup-openwrt)
 
 echo "Starting helpers..."
