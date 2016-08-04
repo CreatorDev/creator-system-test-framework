@@ -16,9 +16,9 @@ RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
 
 USER root
 
-# copy in Awa contiki application
-COPY lwm2m-contiki $SOURCES/lwm2m-contiki
-RUN chown user:user -R $SOURCES/lwm2m-contiki
+# copy in Test Framework
+COPY ./* $SOURCES/creator_system_test_framework
+RUN chown user:user -R $SOURCES/creator_system_test_framework
 
 # copy in psk identity for client daemon
 COPY accessKey $SOURCES/accessKey
@@ -29,10 +29,6 @@ RUN chown user:user -R $SOURCES/accessKey
 RUN chown user:user -R $SOURCES/accessSecret
 RUN chown user:user -R $SOURCES/pskIdentity 
 RUN chown user:user -R $SOURCES/pskKey
-
-# copy in Test Framework
-COPY ./* $SOURCES/creator_system_test_framework
-RUN chown user:user -R $SOURCES/creator_system_test_framework
 
 # start containers in SOURCES/creator_system_test_framework by default
 WORKDIR $SOURCES/creator_system_test_framework

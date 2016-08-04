@@ -30,19 +30,14 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 # TODO support testing arbitrary directory:
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
-# copy in Awa contiki application
-COPY ../lwm2m-contiki $SOURCES/lwm2m-contiki
-RUN chown user:user -R $SOURCES/lwm2m-contiki
-
-# build Awa contiki application
-WORKDIR $SOURCES/lwm2m-contiki/lwm2m-client-contiki-test
-RUN make TARGET=minimal-net
-RUN mkdir -p /var/db
-
 # copy in Test framework
 COPY ./* $SOURCES/creator_system_test_framework
 RUN chown user:user -R $SOURCES/creator_system_test_framework
 
+# build Awa contiki application
+WORKDIR $SOURCES/creator_system_test_framework/lwm2m-contiki/lwm2m-client-contiki-test
+RUN make TARGET=minimal-net
+RUN mkdir -p /var/db
 
 # start containers in SOURCES/creator_system_test_framework by default
 WORKDIR $SOURCES/creator_system_test_framework
