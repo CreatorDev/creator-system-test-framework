@@ -17,14 +17,14 @@ RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
 USER root
 
 # copy in Awa contiki application
-COPY ../lwm2m-contiki $SOURCES/lwm2m-contiki
+COPY lwm2m-contiki $SOURCES/lwm2m-contiki
 RUN chown user:user -R $SOURCES/lwm2m-contiki
 
 # copy in psk identity for client daemon
-COPY ../accessKey $SOURCES/accessKey
-COPY ../accessSecret $SOURCES/accessSecret
-COPY ../pskIdentity $SOURCES/pskIdentity
-COPY ../pskKey $SOURCES/pskKey
+COPY accessKey $SOURCES/accessKey
+COPY accessSecret $SOURCES/accessSecret
+COPY pskIdentity $SOURCES/pskIdentity
+COPY pskKey $SOURCES/pskKey
 RUN chown user:user -R $SOURCES/accessKey
 RUN chown user:user -R $SOURCES/accessSecret
 RUN chown user:user -R $SOURCES/pskIdentity 
