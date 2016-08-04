@@ -40,7 +40,7 @@ if [ x$1 == "xclean" ] ; then
   echo "Cleaning environment..."
   (git clean -fdx)
   (cd AwaLWM2M && git clean -fdx)
-  (cd ../lwm2m-contiki && git clean -fdx)
+  (cd lwm2m-contiki && git clean -fdx)
 fi
 
 ## build base container image:
