@@ -31,7 +31,7 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
 # copy in Test framework
-COPY ./* $SOURCES/creator_system_test_framework
+COPY ./* $SOURCES/creator_system_test_framework/
 RUN chown user:user -R $SOURCES/creator_system_test_framework
 
 # build Awa contiki application

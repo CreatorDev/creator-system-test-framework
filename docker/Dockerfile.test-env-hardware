@@ -17,7 +17,7 @@ RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
 USER root
 
 # copy in Test Framework
-COPY ./* $SOURCES/creator_system_test_framework
+COPY ./* $SOURCES/creator_system_test_framework/
 RUN chown user:user -R $SOURCES/creator_system_test_framework
 
 # copy in psk identity for client daemon
