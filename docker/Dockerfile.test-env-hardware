@@ -1,0 +1,39 @@
+FROM registry-hh.flowcloud.systems:5000/flowm2m/system-test-base
+
+# packages required for test scripts
+USER root
+RUN apt-get update -yq && apt-get install -yq \
+        libxml2-dev \
+        libxslt-dev
+
+USER user
+ENV SOURCES $HOME
+
+# install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
+ADD requirements.txt $SOURCES/creator_system_test_framework/requirements.txt
+USER user
+RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
+
+USER root
+
+# copy in Awa contiki application
+COPY lwm2m-contiki $SOURCES/lwm2m-contiki
+RUN chown user:user -R $SOURCES/lwm2m-contiki
+
+# copy in psk identity for client daemon
+COPY accessKey $SOURCES/accessKey
+COPY accessSecret $SOURCES/accessSecret
+COPY pskIdentity $SOURCES/pskIdentity
+COPY pskKey $SOURCES/pskKey
+RUN chown user:user -R $SOURCES/accessKey
+RUN chown user:user -R $SOURCES/accessSecret
+RUN chown user:user -R $SOURCES/pskIdentity 
+RUN chown user:user -R $SOURCES/pskKey
+
+# copy in Test Framework
+COPY ./* $SOURCES/creator_system_test_framework
+RUN chown user:user -R $SOURCES/creator_system_test_framework
+
+# start containers in SOURCES/creator_system_test_framework by default
+WORKDIR $SOURCES/creator_system_test_framework
+

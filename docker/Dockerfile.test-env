@@ -1,0 +1,49 @@
+FROM registry-hh.flowcloud.systems:5000/flowm2m/system-test-base
+
+# packages needed for contiki
+USER root
+RUN apt-get update -yq && apt-get install -yq \
+        net-tools \
+        iptables \
+        tayga \
+        libxml2-dev \
+        libxslt-dev
+
+ENV SOURCES $HOME
+
+# install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
+ADD requirements.txt $SOURCES/creator_system_test_framework/requirements.txt
+USER user
+RUN pip install Mercurial
+RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
+
+# copy in Awa sources
+USER root
+COPY AwaLWM2M $SOURCES/AwaLWM2M
+RUN chown user:user -R $SOURCES/creator_system_test_framework/AwaLWM2M
+
+# build AwaLWM2M
+WORKDIR /home/user/AwaLWM2M
+USER root
+RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
+
+# TODO support testing arbitrary directory:
+#RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
+
+# copy in Awa contiki application
+COPY lwm2m-contiki $SOURCES/lwm2m-contiki
+RUN chown user:user -R $SOURCES/lwm2m-contiki
+
+# build Awa contiki application
+WORKDIR $SOURCES/lwm2m-contiki/lwm2m-client-contiki-test
+RUN make TARGET=minimal-net
+RUN mkdir -p /var/db
+
+# copy in Test framework
+COPY ./* $SOURCES/creator_system_test_framework
+RUN chown user:user -R $SOURCES/creator_system_test_framework
+
+
+# start containers in SOURCES/creator_system_test_framework by default
+WORKDIR $SOURCES/creator_system_test_framework
+
