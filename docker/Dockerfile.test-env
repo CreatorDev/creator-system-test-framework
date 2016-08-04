@@ -31,7 +31,7 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
 # copy in Awa contiki application
-COPY lwm2m-contiki $SOURCES/lwm2m-contiki
+COPY ../lwm2m-contiki $SOURCES/lwm2m-contiki
 RUN chown user:user -R $SOURCES/lwm2m-contiki
 
 # build Awa contiki application
