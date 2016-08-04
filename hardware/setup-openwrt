@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #/************************************************************************************************************************
 # Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies.
 # All rights reserved.
@@ -20,32 +22,20 @@
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #************************************************************************************************************************/
 
+CHANNEL=$1
 
-###############################################################################
-# 
-#
-# - Setup firewall
-# - Start helpers
-# - Program test-client firmware into constrained device
-#
+if [ -z "$CHANNEL" ]
+  then
+    echo "No wpan channel supplied, using default"
+    CHANNEL=26
+fi
 
-GW_IP=$1
-TEST_FRAMEWORK_PATH=$2
+python fix-lan-prefix.py
+python set-wpan-channel.py $CHANNEL
+ash open-helper-ports
+/etc/init.d/firewall restart
 
-echo "Gateway IP address: $GW_IP"
-
-cd $TEST_FRAMEWORK_PATH
-
-echo "Configuring network on gateway device..."
-(cd hardware && ash setup-openwrt)
-
-echo "Starting helpers..."
-PYTHONPATH=.:$PYTHONPATH python helpers/constrained_client_test_helper.py --ip $GW_IP --port 4142 --log ../logs/xmlrpcserver_constrained_client_local.log &> ../logs/constrained_client.log &
-PYTHONPATH=.:$PYTHONPATH python helpers/gateway_client_test_helper.py --ip $GW_IP  --port 4242 --log ../logs/xmlrpcserver_gateway_client_local.log &> ../logs/gateway_client.log &
-PYTHONPATH=.:$PYTHONPATH python helpers/gateway_server_test_helper.py --ip $GW_IP --port 4342 --log ../logs/xmlrpcserver_gateway_server_local.log &> ../logs/gateway_server.log &
-PYTHONPATH=.:$PYTHONPATH python helpers/bootstrap_server_test_helper.py --ip $GW_IP --port 4442 --log ../logs/xmlrpcserver_bootstrap_local.log &> ../logs/bootstrap_server.log &
-cd -
-
-echo "Programming 6LowPAN clicker with test client..."
-p32 program /mnt/qa/lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.hex
-echo "Programming completed."
+# Improvement: Prevent these Daemons from starting at boot
+/etc/init.d/awa_clientd stop
+/etc/init.d/awa_serverd stop
+/etc/init.d/awa_bootstrapd stop
