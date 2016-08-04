@@ -1,0 +1,16 @@
+# Test Framework Helper XML-RPC server ports
+config rule
+        option src              lan
+        option dest             lan
+        option dest_port        '4142 4242 4342 4442'
+        option target           ACCEPT
+        option proto            tcpudp
+
+config rule
+        option src              wan
+        option dest             lan
+        option dest_port        '4142 4242 4342 4442'
+        option target           ACCEPT
+        option proto            tcpudp
+
+
