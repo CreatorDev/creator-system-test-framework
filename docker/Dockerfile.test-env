@@ -19,7 +19,7 @@ RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
 
 # copy in Awa sources
 USER root
-COPY AwaLWM2M $SOURCES/AwaLWM2M
+COPY AwaLWM2M $SOURCES/creator_system_test_framework/AwaLWM2M
 RUN chown user:user -R $SOURCES/creator_system_test_framework/AwaLWM2M
 
 # build AwaLWM2M
