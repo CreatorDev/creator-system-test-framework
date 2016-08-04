@@ -7,11 +7,13 @@
 #
 
 GW_IP=$1
+TEST_FRAMEWORK_PATH=$2
 
 echo "Gateway IP address: $GW_IP"
 
+cd $TEST_FRAMEWORK_PATH
+
 echo "Configuring network on gateway device..."
-cd /mnt/qa/creator-system-test-framework
 (cd hardware && ash setup-openwrt)
 
 echo "Starting helpers..."
