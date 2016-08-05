@@ -23,7 +23,7 @@ COPY AwaLWM2M $SOURCES/creator_system_test_framework/AwaLWM2M
 RUN chown user:user -R $SOURCES/creator_system_test_framework/AwaLWM2M
 
 # build AwaLWM2M
-WORKDIR /home/user/AwaLWM2M
+WORKDIR /home/user/creator_system_test_framework/AwaLWM2M
 USER root
 RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 
