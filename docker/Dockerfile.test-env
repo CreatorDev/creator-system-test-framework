@@ -36,6 +36,7 @@ RUN chown user:user -R $SOURCES/creator_system_test_framework
 
 # build Awa contiki application
 WORKDIR $SOURCES/creator_system_test_framework/lwm2m-contiki/lwm2m-client-contiki-test
+RUN ls
 RUN make TARGET=minimal-net
 RUN mkdir -p /var/db
 
