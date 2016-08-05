@@ -17,26 +17,22 @@ USER user
 RUN pip install Mercurial
 RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
 
-# copy in Awa sources
+# copy in Test framework and Awa sources
 USER root
-COPY AwaLWM2M $SOURCES/creator_system_test_framework/AwaLWM2M
-RUN chown user:user -R $SOURCES/creator_system_test_framework/AwaLWM2M
+RUN mkdir -p $SOURCES/creator_system_test_framework
+COPY ./* $SOURCES/creator_system_test_framework/
+RUN chown user:user -R $SOURCES/creator_system_test_framework
 
 # build AwaLWM2M
-WORKDIR /home/user/creator_system_test_framework/AwaLWM2M
+WORKDIR $SOURCES/creator_system_test_framework/AwaLWM2M
 USER root
 RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 
 # TODO support testing arbitrary directory:
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
-# copy in Test framework
-COPY ./* $SOURCES/creator_system_test_framework/
-RUN chown user:user -R $SOURCES/creator_system_test_framework
-
 # build Awa contiki application
 WORKDIR $SOURCES/creator_system_test_framework/lwm2m-contiki/lwm2m-client-contiki-test
-RUN ls
 RUN make TARGET=minimal-net
 RUN mkdir -p /var/db
 
