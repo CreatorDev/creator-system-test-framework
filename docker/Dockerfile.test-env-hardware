@@ -10,16 +10,16 @@ USER user
 ENV SOURCES $HOME
 
 # install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
-ADD requirements.txt $SOURCES/creator_system_test_framework/requirements.txt
+ADD requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
 USER user
-RUN pip install -r $SOURCES/creator_system_test_framework/requirements.txt
+RUN pip install -r $SOURCES/DeviceManagementTests/requirements.txt
 
 USER root
 
 # copy in Test Framework
-RUN mkdir -p $SOURCES/creator_system_test_framework
-COPY ./* $SOURCES/creator_system_test_framework/
-RUN chown user:user -R $SOURCES/creator_system_test_framework
+RUN mkdir -p $SOURCES/DeviceManagementTests
+COPY ./* $SOURCES/DeviceManagementTests/
+RUN chown user:user -R $SOURCES/DeviceManagementTests
 
 # copy in psk identity for client daemon
 COPY accessKey $SOURCES/accessKey
@@ -31,6 +31,6 @@ RUN chown user:user -R $SOURCES/accessSecret
 RUN chown user:user -R $SOURCES/pskIdentity 
 RUN chown user:user -R $SOURCES/pskKey
 
-# start containers in SOURCES/creator_system_test_framework by default
-WORKDIR $SOURCES/creator_system_test_framework
+# start containers in SOURCES/DeviceManagementTests by default
+WORKDIR $SOURCES/DeviceManagementTests
 
