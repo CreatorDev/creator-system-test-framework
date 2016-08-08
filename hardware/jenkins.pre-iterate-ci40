@@ -47,5 +47,5 @@ PYTHONPATH=.:$PYTHONPATH python helpers/bootstrap_server_test_helper.py --ip $GW
 cd -
 
 echo "Programming 6LowPAN clicker with test client..."
-p32 program /mnt/qa/lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.hex
+p32 program lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.hex
 echo "Programming completed."
