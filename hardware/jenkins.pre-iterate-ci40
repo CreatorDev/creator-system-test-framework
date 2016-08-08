@@ -44,8 +44,9 @@ PYTHONPATH=.:$PYTHONPATH python helpers/constrained_client_test_helper.py --ip $
 PYTHONPATH=.:$PYTHONPATH python helpers/gateway_client_test_helper.py --ip $GW_IP  --port 4242 --log ../logs/xmlrpcserver_gateway_client_local.log &> ../logs/gateway_client.log &
 PYTHONPATH=.:$PYTHONPATH python helpers/gateway_server_test_helper.py --ip $GW_IP --port 4342 --log ../logs/xmlrpcserver_gateway_server_local.log &> ../logs/gateway_server.log &
 PYTHONPATH=.:$PYTHONPATH python helpers/bootstrap_server_test_helper.py --ip $GW_IP --port 4442 --log ../logs/xmlrpcserver_bootstrap_local.log &> ../logs/bootstrap_server.log &
-cd -
 
 echo "Programming 6LowPAN clicker with test client..."
 p32 program lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.hex
 echo "Programming completed."
+
+cd -
