@@ -10,7 +10,7 @@ USER user
 ENV SOURCES $HOME
 
 # install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
-ADD requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
+ADD DeviceManagementTests/requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
 USER user
 RUN pip install -r $SOURCES/DeviceManagementTests/requirements.txt
 
