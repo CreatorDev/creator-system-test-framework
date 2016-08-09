@@ -1,3 +1,6 @@
 [submodule "AwaLWM2M"]
 	path = AwaLWM2M
 	url = https://github.com/FlowM2M/AwaLWM2M
+[submodule "lwm2m-contiki"]
+	path = lwm2m-contiki
+	url = https://github.com/CreatorDev/lwm2m-contiki.git
