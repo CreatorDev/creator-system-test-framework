@@ -33,9 +33,9 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 
 # build Awa contiki application
 WORKDIR $SOURCES/DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test
-#RUN make TARGET=minimal-net
-#RUN mkdir -p /var/db
+RUN make TARGET=minimal-net
+RUN mkdir -p /var/db
 
 # start containers in SOURCES/DeviceManagementTests by default
-#WORKDIR $SOURCES/DeviceManagementTests
+WORKDIR $SOURCES/DeviceManagementTests
 
