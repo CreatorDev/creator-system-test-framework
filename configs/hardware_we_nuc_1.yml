@@ -1,0 +1,134 @@
+paths:
+  libawa: /usr/lib/libawa.so
+  awa-clientd: /bin/awa_clientd
+  awa-serverd: /bin/awa_serverd
+  awa-bootstrapd: /bin/awa_bootstrapd
+
+topologies:
+  cloud-client-we-nuc-1:
+    # Basic gateway client provisioning
+    device-servers: we-nuc-1
+    gateway-clients: we-nuc-1
+  constrained-device-only:
+    constrained-clients: ci40
+  local-gateways:
+    bootstrap-servers: ci40-local
+    gateway-servers: ci40-local
+    gateway-clients: ci40-local
+
+bootstrap-servers:
+  ci40-local:
+    config: bootstrap-configs/bootstrap-localhost.config
+    ip-address: 127.0.0.1
+    port: 15683
+    log: gwbootstrapd.log
+    proxy: ci40-bootstrap-server
+  we-nuc-1:
+    config: bootstrap-configs/bootstrap-we-nuc-1.config
+    ip-address: 127.0.0.1
+    port: 15683
+    log: gwbootstrapd.log
+    proxy: ci40-bootstrap-server
+  ci40:
+    config: bootstrap-configs/bootstrap-contiki.config
+    config2: bootstrap-configs/bootstrap-contiki-flow-NAT64.config
+    ip-address: 127.0.0.1
+    port: 15683
+    log: gwbootstrapd.log
+    proxy: ci40-bootstrap-server
+    address-family: 6
+    interface: lowpan0
+  ci40-without-gateway-server:
+    config: bootstrap-configs/bootstrap-contiki-flow-NAT64.config
+    ip-address: 127.0.0.1
+    port: 15683
+    log: gwbootstrapd.log
+    proxy: ci40-bootstrap-server
+    address-family: 6
+    interface: lowpan0
+
+gateway-servers:
+  ci40-local:
+    ip-address: 127.0.0.2
+    port: 5683
+    ipc-address: 127.0.0.2
+    ipc-port: 54321
+    log: gateway_server_local.log
+    content-type: 1542
+    proxy: ci40-gateway-server
+  ci40:
+    ip-address: 127.0.0.2
+    port: 5683
+    ipc-address: 127.0.0.2
+    ipc-port: 54321
+    interface: lowpan0
+    address-family: 6
+    log: gateway_server_local.log
+    content-type: 1542
+    proxy: ci40-gateway-server
+
+gateway-clients:
+  ci40-local:
+    client-id: test_local_client
+    device-name: TestGatewayDevice1
+    port: 6000
+    address-family: 4
+    ipc-address: 127.0.0.1
+    ipc-port: 12345
+    log: gateway_client_local.log
+    bootstrap-uri: coap://127.0.0.1:15683
+    proxy: ci40-gateway-client
+  we-nuc-1:
+    client-id: test_local_client
+    device-name: TestGatewayDevice1
+    port: 6000
+    address-family: 4
+    ipc-address: 127.0.0.1
+    ipc-port: 12345
+    log: gateway_client_we-nuc-1.log
+    bootstrap-uri: coaps://we-nuc-1.we.imgtec.org:15684
+    proxy: ci40-gateway-client
+    object-definitions-file: /mnt/qa/AwaLWM2M/tools/tests/object-defs-tools-test.xml
+
+constrained-clients:
+  ci40:
+    serial-port: /dev/ttySC0
+    client-id: constrained1
+    device-name: TestConstrainedDevice1
+    serial-number: SN12345678CD
+    bootstrap-uri: coap://[2001:1418:100::1]:15683
+    port: 6007
+    proxy: ci40-constrained-client
+
+proxies:
+
+  ci40-bootstrap-server:
+    protocol: XMLRPC
+    ip-address: 192.168.149.211
+    port: 4442
+  ci40-gateway-server:
+    protocol: XMLRPC
+    ip-address: 192.168.149.211
+    port: 4342
+  ci40-gateway-client:
+    protocol: XMLRPC
+    ip-address: 192.168.149.211
+    port: 4242
+  ci40-constrained-client:
+    protocol: XMLRPC
+    ip-address: 192.168.149.211
+    port: 4142
+
+device-servers:
+  we-nuc-1:
+    uri: http://we-nuc-1.we.imgtec.org
+    port: 80
+    verify-ssl-certificate: true
+  localhost:
+    uri: http://localhost
+    port: 80
+    verify-ssl-certificate: true
+
+cloud-servers:
+
+cloud-tenants:
