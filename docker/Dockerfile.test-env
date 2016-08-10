@@ -31,7 +31,6 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
 # build Awa contiki application
-USER user
 WORKDIR $SOURCES/DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test
 RUN make TARGET=minimal-net
 RUN mkdir -p /var/db
