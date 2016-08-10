@@ -12,15 +12,14 @@ RUN apt-get update -yq && apt-get install -yq \
 ENV SOURCES $HOME
 
 # install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
-ADD requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
+ADD DeviceManagementTests/requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
 USER user
 RUN pip install Mercurial
 RUN pip install -r $SOURCES/DeviceManagementTests/requirements.txt
 
 # copy in Test framework and Awa sources
 USER root
-RUN mkdir -p $SOURCES/DeviceManagementTests
-COPY ./* $SOURCES/DeviceManagementTests/
+COPY DeviceManagementTests $SOURCES/DeviceManagementTests
 RUN chown user:user -R $SOURCES/DeviceManagementTests
 
 # build AwaLWM2M
@@ -32,6 +31,7 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
 # build Awa contiki application
+USER user
 WORKDIR $SOURCES/DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test
 RUN make TARGET=minimal-net
 RUN mkdir -p /var/db

@@ -47,5 +47,5 @@ fi
 #docker/build_system-test-base.sh
 
 # build test environment image, based on system-test-base:
-docker build -t test-env -f docker/$DOCKER_ENV_FILE .
+docker build -t test-env -f DeviceManagementTests/docker/$DOCKER_ENV_FILE .
 
