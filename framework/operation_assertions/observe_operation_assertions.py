@@ -24,8 +24,7 @@ from framework.awa_enums import AwaError
 from framework.awa_exceptions import AwaUnexpectedErrorException
 from operation_assertions_common import CheckForException
 import write_operation_assertions
-import cloud_set_operation_assertions
-from framework.test_assertions import WriteAssertion, CloudSetAssertion
+from framework.test_assertions import WriteAssertion
 
 def CheckForSuccess(testCase, assertion):
     session = testCase.topology.gatewayServers[0]._session
@@ -35,8 +34,6 @@ def CheckForSuccess(testCase, assertion):
 
     if assertion.writeWithDaemon:
         write_operation_assertions.CheckForSuccess(testCase, WriteAssertion(None, assertion.path, assertion.resourceType, assertion.expectedValue, writeMode=assertion.writeMode))
-    else:
-        cloud_set_operation_assertions.CheckForSuccess(testCase, CloudSetAssertion(None, assertion.path, assertion.expectedValue))
 
     testCase.topology.gatewayServers[0].WaitForNotification(session, assertion.path)
 
