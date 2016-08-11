@@ -50,7 +50,7 @@ class ListVersions(Plugin):
     def getContikiVersion(self):
         app_version = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip()[0:7]
         # currently, lwm2m-contiki has an Awa LWM2M submodule which may differ in version to the main Awa component
-        awa_sha = subprocess.check_output(["git", "rev-parse", "HEAD:AwaLWM2M"], cwd="../lwm2m-contiki").strip()[0:7]
+        awa_sha = subprocess.check_output(["git", "rev-parse", "HEAD:AwaLWM2M"], cwd="lwm2m-contiki").strip()[0:7]
         return "%s [Awa LWM2M %s]" % (app_version, awa_sha)
 
     def configure(self, options, noseconfig):
