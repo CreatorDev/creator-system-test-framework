@@ -22,7 +22,6 @@
 
 import unittest
 
-from framework import provisioning
 from framework.topology_manager import TopologyManager
 
 class GWClientTestCase(unittest.TestCase):

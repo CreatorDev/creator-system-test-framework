@@ -21,7 +21,6 @@
 #************************************************************************************************************************/
 
 import unittest
-from framework import provisioning
 from framework.topology_manager import TopologyManager
 
 class ConstrainedClientTestCase(unittest.TestCase):
@@ -48,31 +47,3 @@ class ConstrainedClientWithCustomObjectsTestCase(ConstrainedClientTestCase):
     def tearDown(self):
         pass
 
-class ProvisionedConstrainedClientTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.topology = TopologyManager.fromConfigFile("constrained-device-without-gateways-uat-hobbyist")
-
-        def delTopology(): del self.topology
-        self.addCleanup(delTopology)
-
-
-        self.topology.constrainedClients[0].createResource(3,0,2)
-        self.topology.constrainedClients[0].setResourceValue("/3/0/2", self.topology.constrainedClients[0]._constrainedClientConfig['serial-number'])
-
-        self.topology.cloud.createUser()
-        self.addCleanup(self.topology.cloud.deleteUser)
-        self.topology.cloud.generateDeviceRegistrationToken()
-
-        deviceType = self.topology.cloud._tenantConfig['device-type']
-        licenseeID = self.topology.cloud._tenantConfig['licensee-id']
-        licenseeSecret = self.topology.cloud._tenantConfig['licensee-secret']
-        deviceName = self.topology.constrainedClients[0]._constrainedClientConfig['device-name']
-
-        provisioning.ProvisionConstrainedDeviceWithoutGatewayServer(self.topology.constrainedClients[0], deviceName, deviceType, licenseeID, licenseeSecret, self.topology.cloud.FCAP)
-
-        print("Logging into device")
-        self.topology.cloud.loginToDevice(self.topology.constrainedClients[0])
-
-    def tearDown(self):
-        pass
