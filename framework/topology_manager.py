@@ -29,7 +29,6 @@ from proxies.gateway_server_xml_rpc import GWServerXmlRpc
 from proxies.gateway_client_xml_rpc import GWClientXmlRpc
 from proxies.device_server_client_http import DeviceServerClientHttp
 from proxies.constrained_client_xml_rpc import ConstrainedClientXmlRpc
-from flowcore.flowcore_cloud_session import FlowCoreCloudSession
 from helpers.httphelper import HttpHelper
 
 class UnsupportedProxyProtocolException(Exception):
