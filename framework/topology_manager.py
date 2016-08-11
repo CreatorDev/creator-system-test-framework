@@ -39,7 +39,6 @@ class ProxyProtocol(IntEnum):
 
 class TopologyManager(object):
     def __init__(self):
-        self.cloud = None
         self.deviceServerClients = []
         self.bootstrapServers = []
         self.gatewayServers = []
@@ -47,24 +46,22 @@ class TopologyManager(object):
         self.constrainedClients = []
 
     @classmethod
-    def custom(cls, cloudServer=None, cloudTenant=None, deviceServers=None, bootstrapServers=None, gatewayServers=None, gatewayClients=None, constrainedClients=None):
-        return cls._loadTopology(cloudServer, cloudTenant, deviceServers, bootstrapServers, gatewayServers, gatewayClients, constrainedClients)
+    def custom(cls, deviceServers=None, bootstrapServers=None, gatewayServers=None, gatewayClients=None, constrainedClients=None):
+        return cls._loadTopology(deviceServers, bootstrapServers, gatewayServers, gatewayClients, constrainedClients)
 
 
     @classmethod
     def fromConfigFile(cls, topologyName):
         topologyConfig = test_config.config["topologies"][topologyName]
         print 'Loading Topology: ' + topologyName
-        return cls._loadTopology(topologyConfig.get("cloud-server", None), \
-                                 topologyConfig.get("cloud-tenant", None), \
-                                 topologyConfig.get("device-servers", None), \
+        return cls._loadTopology(topologyConfig.get("device-servers", None), \
                                  topologyConfig.get("bootstrap-servers", None), \
                                  topologyConfig.get("gateway-servers", None), \
                                  topologyConfig.get("gateway-clients", None), \
                                  topologyConfig.get("constrained-clients", None))
 
     @classmethod
-    def _loadTopology(cls, cloudServer, cloudTenant, deviceServers, bootstrapServers, gatewayServers, gatewayClients, constrainedClients):
+    def _loadTopology(cls, deviceServers, bootstrapServers, gatewayServers, gatewayClients, constrainedClients):
         topology = cls()
         #print("Loading topology: ", topologyConfig)
 
@@ -74,9 +71,6 @@ class TopologyManager(object):
                 deviceServerConfig = test_config.config["device-servers"][deviceServer.strip()]
                 if deviceServerConfig is not None:
                     topology.deviceServerClients.append(DeviceServerClientHttp(deviceServerConfig))
-
-        if cloudServer is not None and cloudTenant is not None:
-            topology.cloud = FlowCoreCloudSession(cloudServer, cloudTenant)
 
         if constrainedClients is not None:
             constrainedClients = constrainedClients.split(",")
