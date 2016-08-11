@@ -24,7 +24,7 @@ import unittest
 from nose_parameterized import parameterized
 from nose.plugins.attrib import attr
 
-from framework.test_cases.gateway_client_test_case import GWClientTestCase, GWClientNUCTestCase, GWClientAndCloudTestCase
+from framework.test_cases.gateway_client_test_case import GWClientTestCase, GWClientNUCTestCase
 
 from framework.operation_assertions import get_operation_assertions
 from framework.operation_assertions import set_operation_assertions
@@ -99,7 +99,7 @@ class DeviceObjectDefinitionDeviceServerCheck(GWClientNUCTestCase):
         # Get definition test cases
         ["GetDeviceObjectDefinition",                (GetDefinitionAssertion(client_get_definition_assertions.CheckForSuccess, deviceObjectSettings, None), )],
         ["GetDeviceServerDeviceObjectDefinition",    (GetDefinitionAssertion(device_server_get_definition_assertions.CheckForSuccess, deviceObjectSettings, None), )],
-                
+
         ["GetDeviceResourceDefinitions", (GetDefinitionAssertion(client_get_definition_assertions.CheckForSuccess, deviceObjectSettings, deviceResources), )],
         ["GetDeviceServerResourceDefinitions", (GetDefinitionAssertion(device_server_get_definition_assertions.CheckForSuccess, deviceObjectSettings, deviceResources), )],
 
@@ -266,61 +266,7 @@ class DeviceObjectCreate(GWClientTestCase):
                                                           GetAssertion(get_operation_assertions.CheckForSuccess, "/3/0/3", AwaResourceType.String, "test"), )],
 
         ["DaemonCreateExistingFirmwareVersionResource",  (SetAssertion(set_operation_assertions.CheckForCannotCreate, "/3/0/3", None, None, False, True), )],
-        
-    ], testcase_func_name=noseParameterisedTestNameGenerator)
 
-    def test(self, name, assertions):
-        test_assertions.callAssertions(self, assertions)
-
-
-@attr("gateway_client", "device_object", "cloud")
-class DeviceObjectTestCasesWithCloud(GWClientAndCloudTestCase):
-    @parameterized.expand([
-
-        # TODO: Confirm device metadata within cloud is the same as device object/resource definitions
-
-        # Daemon Set, Cloud Get operations. Cloud GET should only succeed on RW resources.
-        ["DaemonSetCloudGetAvailablePowerSourcesResource",  (CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/6", {0: 1, 1: 5}),
-                                                             SetAssertion(set_operation_assertions.CheckForSuccess, "/3/0/6", AwaResourceType.IntegerArray, {0: 10, 1: 20}),
-                                                             CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/6", {0: 10, 1: 20}), )],
-        
-        ["DaemonSetCloudGetCurrentTimeResource",           (CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/13", "2056-02-24T12:03:55.0000000Z"),
-                                                             SetAssertion(set_operation_assertions.CheckForSuccess, "/3/0/13", AwaResourceType.Time, 1459937482),
-                                                             CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/13", "2016-04-06T10:11:22.0000000Z"), )],
-                           
-        ["CloudSetCloudGetCurrentTimeResource",             (CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/13", "2056-02-24T12:03:55.0000000Z"),
-                                                             CloudSetAssertion(cloud_set_operation_assertions.CheckForSuccess, "/3/0/13", "2016-04-06T10:11:22Z"),
-                                                             CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/13", "2016-04-06T10:11:22.0000000Z"), )],
-
-        # TODO reset of device resources ^^
-
-
-        # TODO Cloud Set, Daemon Get operations. Cloud SET should only succeed on RW resources.
-        ["CloudSetDaemonGetCurrentTimeResource",          (GetAssertion(get_operation_assertions.CheckForSuccess, "/3/0/13", AwaResourceType.Time, 2718619435),
-                                                           CloudSetAssertion(cloud_set_operation_assertions.CheckForSuccess, "/3/0/13", "2016-04-06T10:11:22Z"),
-                                                           GetAssertion(get_operation_assertions.CheckForSuccess, "/3/0/13", AwaResourceType.Time, 1459937482), )],
-        #TODO rest of device resources ^^
-
-
-        # Cloud Set, Cloud Get. Cloud SET on read only resources should fail, leaving the value of the resource unchanged.
-        ["CloudSetGetReadOnlySerialNumberResource",       (CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/2", "SN12345678"),
-                                                           CloudSetAssertion(cloud_set_operation_assertions.CheckForBadRequest, "/3/0/2", "AwaDeviceModel123"),
-                                                           CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/2", "SN12345678"), )],
-
-        ["CloudSetGetReadOnlyPowerSourceVoltageResource", (CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/7", {0: 3800, 1: 5000}),
-                                                           CloudSetAssertion(cloud_set_operation_assertions.CheckForBadRequest, "/3/0/7", {0: 2000, 1: 1000}),
-                                                           CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/7", {0: 3800, 1: 5000}), )],
-
-        ["CloudSetGetReadOnlyPowerSourceCurrentResource", (CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/8", {0: 125, 1: 900}),
-                                                           CloudSetAssertion(cloud_set_operation_assertions.CheckForBadRequest, "/3/0/8", {0: 321, 1: 654}),
-                                                           CloudGetAssertion(cloud_get_operation_assertions.CheckForSuccess, "/3/0/8", {0: 125, 1: 900}), )],
-        #TODO rest of device resources ^^
-
-       # Daemon Get/Subscribe, Cloud modify daemon value
-       ["DaemonSubscribeToChangeTimezoneResourceSetThroughCloud", (GetAssertion(get_operation_assertions.CheckForSuccess, "/3/0/15", AwaResourceType.String, "Pacific/Wellington"),
-                                                                   SubscribeAssertion(subscribe_operation_assertions.CheckForSuccess, "/3/0/15", AwaResourceType.String, "Hyderabad", False), )],
-
-        # TODO Negative Cloud Get/Set test cases
     ], testcase_func_name=noseParameterisedTestNameGenerator)
 
     def test(self, name, assertions):
