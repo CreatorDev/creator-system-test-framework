@@ -24,16 +24,6 @@ import unittest
 
 from framework.topology_manager import TopologyManager
 
-class GWClientTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.topology = TopologyManager.fromConfigFile("cloud-client-uat-hobbyist")
-        def delTopology(): del self.topology
-        self.addCleanup(delTopology)
-
-    def tearDown(self):
-        pass
-
 class GWClientNUCTestCase(unittest.TestCase):
 
     def setUp(self):
