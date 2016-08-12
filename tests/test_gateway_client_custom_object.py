@@ -32,8 +32,6 @@ from framework.operation_assertions import subscribe_operation_assertions
 from framework.operation_assertions import client_delete_assertions
 from framework.operation_assertions import client_define_assertions
 from framework.operation_assertions import client_get_definition_assertions
-from framework.operation_assertions import cloud_get_operation_assertions
-from framework.operation_assertions import cloud_set_operation_assertions
 
 from framework import test_assertions
 from framework.test_assertions import Assertion
@@ -43,8 +41,6 @@ from framework.test_assertions import SubscribeAssertion
 from framework.test_assertions import DeleteAssertion
 from framework.test_assertions import DefineOperationAssertion
 from framework.test_assertions import GetDefinitionAssertion
-from framework.test_assertions import CloudGetAssertion
-from framework.test_assertions import CloudSetAssertion
 from framework.definitions import ObjectDefinitionSettings, ResourceDefinitionSettings
 
 from framework.test_objects import objectDefinition1000
