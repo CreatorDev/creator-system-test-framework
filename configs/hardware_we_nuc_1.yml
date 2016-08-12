@@ -128,7 +128,3 @@ device-servers:
     uri: http://localhost
     port: 80
     verify-ssl-certificate: true
-
-cloud-servers:
-
-cloud-tenants:

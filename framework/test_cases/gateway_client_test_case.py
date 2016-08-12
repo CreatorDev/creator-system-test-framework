@@ -27,7 +27,7 @@ from framework.topology_manager import TopologyManager
 class GWClientTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.topology = TopologyManager.fromConfigFile("cloud-client-we-nuc-1-hobbyist")
+        self.topology = TopologyManager.fromConfigFile("cloud-client-we-nuc-1")
         def delTopology(): del self.topology
         self.addCleanup(delTopology)
 
@@ -37,7 +37,7 @@ class GWClientTestCase(unittest.TestCase):
 class GWClientNUCTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.topology = TopologyManager.fromConfigFile("cloud-client-we-nuc-1-hobbyist")
+        self.topology = TopologyManager.fromConfigFile("cloud-client-we-nuc-1")
         def delTopology(): del self.topology
         self.addCleanup(delTopology)
 

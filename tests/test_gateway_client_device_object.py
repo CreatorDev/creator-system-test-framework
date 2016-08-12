@@ -24,7 +24,7 @@ import unittest
 from nose_parameterized import parameterized
 from nose.plugins.attrib import attr
 
-from framework.test_cases.gateway_client_test_case import GWClientTestCase, GWClientNUCTestCase
+from framework.test_cases.gateway_client_test_case import GWClientNUCTestCase
 
 from framework.operation_assertions import get_operation_assertions
 from framework.operation_assertions import set_operation_assertions
