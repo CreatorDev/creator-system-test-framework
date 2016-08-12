@@ -44,7 +44,7 @@ class SerialTests(ConstrainedClientTestCase):
         inputString = "a"*118
         output = self.topology.constrainedClients[0].echo(inputString)
         self.assertEqual(inputString, output)
-        
+
     @unittest.skip("Unresponsive")
     def test_EchoOverMaximum(self):
         inputString = "a"*120
@@ -63,50 +63,48 @@ class SerialTests(ConstrainedClientTestCase):
 
 @attr("constrained_client")
 class ConstrainedDeviceSetGet(ConstrainedClientWithCustomObjectsTestCase):
-    
+
     def test_SetGetDeviceObjectResources(self):
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/3/0/0", "hello"))
         self.assertEqual("hello", self.topology.constrainedClients[0].getResourceValue("/3/0/0"))
-        
+
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/3/0/13", 1024))
         self.assertEqual(1024, self.topology.constrainedClients[0].getResourceValue("/3/0/13", int))
-        
+
     # TODO all resource types
     def test_SetGetCustomStringResource(self):
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/1000/0/202", "test"))
         self.assertEqual("test", self.topology.constrainedClients[0].getResourceValue("/1000/0/202"))
-    
+
     def test_SetGetCustomIntegerResource(self):
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/1000/0/203", 12345))
         self.assertEqual(12345, self.topology.constrainedClients[0].getResourceValue("/1000/0/203", int))
-    
+
     def test_SetGetCustomOpaqueResource(self):
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/1000/0/206", str(bytearray([65, 0, 66, ]))))
         self.assertEqual(str(bytearray([65, 0, 66, ])), self.topology.constrainedClients[0].getResourceValue("/1000/0/206"))
 
 @attr("constrained_client", "gateway_server", "bootstrap_server")
 class GatewayServerSetGet(GWServerAndConstrainedClientTestCase):
-    
 
-    
     def test_SetGetDeviceObjectResources(self):
         self.assertEqual("0", self.topology.constrainedClients[0].createResource(3, 0, 0))
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/3/0/0", "hello"))
         self.assertEqual("hello", self.topology.constrainedClients[0].getResourceValue("/3/0/0"))
         self.assertEqual("hello", self.topology.gatewayServers[0].ReadSingleResource(self.topology.constrainedClients[0].getClientID(), "/3/0/0", AwaResourceType.String))
-    
+
     @unittest.skip("TODO")
     def test_SetGetCustomOpaqueResource(self):
         # TODO
         #define test objects on CD
         #self.topology.gatewayServers[0].Define(test_objects.objectDefinition1000, test_objects.constrainedResourceDefinitions)
         pass
-        
+
         '''gatewayServer = self.topology.gatewayServers[0]
         gatewayServer.WaitForClientObject(self.topology.constrainedClients[0].getClientID(), "/1000/0")
         readOperation = gatewayServer.CreateReadOperation(gatewayServer._session, self.topology.constrainedClients[0].getClientID(), "/1000/0/206")
-        
-        
+
+
         value = gatewayServer.GetResourceValueFromReadOperation(readOperation, self.topology.constrainedClients[0].getClientID(), "/1000/0/206", AwaResourceType.Opaque)
         #pathResult = gatewayServer.GetPathResultFromReadOperation(readOperation, self.topology.constrainedClients[0].getClientID(), "/1000/0/206")
         #error = gatewayServer.GetPathResultError(pathResult)
@@ -118,7 +116,7 @@ class GatewayServerSetGet(GWServerAndConstrainedClientTestCase):
 
 @attr("constrained_client", "bootstrap_server")
 class ConnectionTests(unittest.TestCase):
-    
+
     def test_CanBootstrap(self):
         # instances should be added to constrained device's server object to be considered "bootstrapped"
         # /0/0: Bootstrap server (Will already exist because the client needs to know where to connect)
@@ -127,102 +125,40 @@ class ConnectionTests(unittest.TestCase):
         self.topology = TopologyManager.fromConfigFile("constrained-device-without-gateway-client-uat-hobbyist")
         def delTopology(): del self.topology
         self.addCleanup(delTopology)
-        
+
         self.topology.constrainedClients[0].start()
         self.topology.constrainedClients[0].WaitForResources(["/0/0/0","/0/1/0", "/0/2/0", ])
-        
+
     def test_CanRegisterWithGatewayServer(self):
         self.topology = TopologyManager.fromConfigFile("constrained-device-without-gateway-client-uat-hobbyist")
         def delTopology(): del self.topology
         self.addCleanup(delTopology)
-        
+
         self.topology.constrainedClients[0].start()
-        
+
         self.topology.constrainedClients[0].WaitForResources(["/0/0/0","/0/1/0", "/0/2/0", ])  # wait for bootstrapping to complete
         self.topology.gatewayServers[0].WaitForClient(self.topology.constrainedClients[0].getClientID())
-
-    def test_CanRegisterWithCloudServer(self):
-        # spoof a provisioning request with an invalid FCAP code, if we get a challenge back we are connected to the Cloud LWM2M server.
-        self.topology = TopologyManager.fromConfigFile("constrained-device-without-gateway-client-uat-hobbyist")
-        def delTopology(): del self.topology
-        self.addCleanup(delTopology)
-        
-        deviceType = self.topology.cloud._tenantConfig['device-type']
-        licenseeID = self.topology.cloud._tenantConfig['licensee-id']
-        #licenseeSecret = self.topology.cloud._tenantConfig['licensee-secret']
-        deviceName = self.topology.constrainedClients[0]._constrainedClientConfig['device-name']
-        
-        self.topology.constrainedClients[0].createObjectInstance(20000, 0)
-        self.topology.constrainedClients[0].createResource(20000, 0, 3)
-    
-        self.topology.constrainedClients[0].setResourceValue("/20000/0/2", deviceType)
-        self.topology.constrainedClients[0].setResourceValue("/20000/0/3", deviceName)
-        self.topology.constrainedClients[0].setResourceValue("/20000/0/5", "ABCDEFGH")
-        self.topology.constrainedClients[0].setResourceValue("/20000/0/6", licenseeID)
-
-        self.topology.constrainedClients[0].start()
-        self.topology.constrainedClients[0].WaitForResources(["/0/0/0","/0/1/0", "/0/2/0", ])  # wait for bootstrapping to complete
-        
-        attempts = 50
-        interval = 0.5
-        while attempts > 0:
-            attempts -= 1
-            time.sleep(interval)
-            iterations = self.topology.constrainedClients[0].getResourceValue("/20000/0/8", int)
-            if iterations > 0:
-                print("Read hash iterations: %d" % (iterations,))
-                break;
-            else:
-                sys.stdout.write(".")
-                sys.stdout.flush()
-        else:
-            self.assertTrue(False, "Challenge was not received from Cloud Server")
 
     def test_TaygaInterface(self):
         self.topology = TopologyManager.fromConfigFile("constrained-device-only")
         def delTopology(): del self.topology
         self.addCleanup(delTopology)
-        
+
         output = self.topology.constrainedClients[0].executeScript(["hardware/check-tayga", ])
         self.assertEqual("success", output.strip())
-    
+
     def test_ServerCanAccessConstrainedClient(self):
         self.topology = TopologyManager.fromConfigFile("constrained-device-without-gateway-client-uat-hobbyist")
         def delTopology(): del self.topology
         self.addCleanup(delTopology)
-        
+
         self.topology.constrainedClients[0].start()
-        
+
         self.assertEqual("0", self.topology.constrainedClients[0].createResource(3, 0, 0))
         self.assertEqual("0", self.topology.constrainedClients[0].setResourceValue("/3/0/0", "hello"))
         self.assertEqual("hello", self.topology.constrainedClients[0].getResourceValue("/3/0/0"))
-        
+
         self.topology.constrainedClients[0].WaitForResources(["/0/0/0","/0/1/0", "/0/2/0", ])  # wait for bootstrapping to complete
         self.topology.gatewayServers[0].WaitForClient(self.topology.constrainedClients[0].getClientID())
         self.assertEqual("hello", self.topology.gatewayServers[0].ReadSingleResource(self.topology.constrainedClients[0].getClientID(), "/3/0/0", AwaResourceType.String))
 
-@attr("constrained_client", "cloud")
-class ConstrainedClientProvisionedWithCloudWithoutGateway(ProvisionedConstrainedClientTestCase):
-
-    def test_IsProvisioned(self):
-        deviceLink = self.topology.cloud.getDeviceLink('self')
-        self.assertIsNotNone(deviceLink)
-        self.assertGreater(len(deviceLink), 0)
-
-@attr("constrained_client", "gateway_server", "cloud")
-class ConstrainedClientProvisionedWithCloud(GWServerAndProvisionedConstrainedClientTestCase):
-
-    def test_IsProvisioned(self):
-        deviceLink = self.topology.cloud.getDeviceLink('self')
-        self.assertIsNotNone(deviceLink)
-        self.assertGreater(len(deviceLink), 0)
-
-    @unittest.skip("Test takes a very long time.")
-    def test_ReProvision(self):
-        for i in range(0, 1000):
-            print ("Provisioning run {0}".format(i))
-            self.topology.cloud.getDeviceLink()
-            provisioning.UnProvisionConstrainedDevice(self.topology.constrainedClients[0].client_id, self.topology.gatewayServers[0])
-            self.topology.cloud.deleteDevice()
-            provisioning.ProvisionConstrainedDevice(self.topology.constrainedClients[0].client_id, self.topology.gatewayServers[0], self.topology.cloud.cloudConfig, self.topology.cloud.FCAP)
-        

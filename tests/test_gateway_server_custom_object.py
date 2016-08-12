@@ -35,8 +35,8 @@ from framework.operation_assertions import server_delete_assertions
 from framework.operation_assertions import read_operation_assertions
 from framework.operation_assertions import write_operation_assertions
 from framework.operation_assertions import observe_operation_assertions
-from framework.operation_assertions import list_clients_assertions 
-from framework.operation_assertions import read_operation_assertions 
+from framework.operation_assertions import list_clients_assertions
+from framework.operation_assertions import read_operation_assertions
 
 from framework import test_assertions
 from framework.test_assertions import Assertion
@@ -63,18 +63,18 @@ from framework.nose_parameterised import noseParameterisedTestNameGenerator
 # TODO:
 # execute / client subscribe to execute
 # write attributes
-# Custom objects need to be defined through the REST API in order to do cloud validation
+# Custom objects need to be defined through the REST API in order to do device server validation
 
 @attr("gateway_client", "gateway_server")
 class CustomObjectDefineTestCases(GWServerAndClientTestCase):
     @parameterized.expand([
-        
+
         # TODO move to device test cases
         ["ReadDeviceCurrentTimeResource", (ReadAssertion(read_operation_assertions.CheckForSuccess, "/3/0/13", AwaResourceType.Time, 2718619435), )],
                                                          #WriteAssertion(write_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "Imagination Technologies"),
                                                          #ReadAssertion(read_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "Imagination Technologies")))),
 
-        
+
         # Server & Client define / get definition test cases
         ["ServerDefineAndGetObject1000Definition", (DefineOperationAssertion(server_define_assertions.CheckForSuccess, objectDefinition1000, resourceDefinitions),
                                                     GetDefinitionAssertion(server_get_definition_assertions.CheckForSuccess, objectDefinition1000, resourceDefinitions), )],
@@ -95,10 +95,10 @@ class CustomObjectDefineTestCases(GWServerAndClientTestCase):
                                                     GetDefinitionAssertion(server_get_definition_assertions.CheckForSuccess, objectDefinition1003, resourceDefinitions), )],
         ["ClientDefineAndGetObject1003Definition", (DefineOperationAssertion(client_define_assertions.CheckForSuccess, objectDefinition1003, resourceDefinitions),
                                                     GetDefinitionAssertion(client_get_definition_assertions.CheckForSuccess, objectDefinition1003, resourceDefinitions), )],
-        
-        
+
+
     ], testcase_func_name=noseParameterisedTestNameGenerator)
-    
+
     def test(self, name, assertions):
         test_assertions.callAssertions(self, assertions)
 
@@ -109,11 +109,11 @@ class CustomObjectCreateTestCases(GWServerAndClientTestCase):
         super(CustomObjectCreateTestCases, self).setUp()
         self.topology.gatewayClients[0].DefineTestObjects()
         self.topology.gatewayServers[0].DefineTestObjects()
-    
+
     @parameterized.expand([
         ["CreateSingleObjectInstance",             (WriteAssertion(write_operation_assertions.CheckForSuccess, "/1000/0", None, None, True), )],
     ], testcase_func_name=noseParameterisedTestNameGenerator)
-    
+
     def test(self, name, assertions):
         test_assertions.callAssertions(self, assertions)
 
@@ -125,10 +125,10 @@ class CustomObjectTestCases(GWServerAndClientTestCase):
         self.topology.gatewayClients[0].DefineTestObjects()
         self.topology.gatewayServers[0].DefineTestObjects()
         self.topology.gatewayClients[0].CreateInstancesOfTestObjects();
-    
+
     @parameterized.expand([
         # List clients test cases
-        
+
 #         FIXME: Need a better way to get client ID
 #         ["ListClientsHasClientAndCustomObject",         (DeleteAssertion(client_delete_assertions.CheckForSuccess, "/1001/0"),  # delete the instance so only the object shows
 #                                                          ListClientsAssertion(list_clients_assertions.CheckObjectExists, test_config.config[test_config.config['TestPlan']["local_client"]]['client_id'], "/1001"), )],
@@ -137,25 +137,25 @@ class CustomObjectTestCases(GWServerAndClientTestCase):
 #         ["ListClientsDoesNotHaveUnknownObject",         (ListClientsAssertion(list_clients_assertions.CheckObjectDoesNotExist, test_config.config[test_config.config['TestPlan']["local_client"]]['client_id'], "/99999"), )],
 #         ["ListClientsDoesNotHaveUnknownObjectInstance", (ListClientsAssertion(list_clients_assertions.CheckObjectDoesNotExist, test_config.config[test_config.config['TestPlan']["local_client"]]['client_id'], "/1000/99999"), )],
 #         ["ListClientsDoesNotHaveUnknownClient",         (ListClientsAssertion(list_clients_assertions.CheckClientDoesNotExist, "client999", None), )],
-         
+
         # Daemon Read / Write test cases
         ["DaemonReadStringArrayResourceDefaultValue",   (ReadAssertion(read_operation_assertions.CheckForSuccess, "/1000/0/209", AwaResourceType.StringArray, {1: "Sample1", 2: "Sample2", 3: "Sample3"}), )],
-         
+
         ["DaemonWriteReadMandatoryStringResource",      (ReadAssertion(read_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "test"),
                                                          WriteAssertion(write_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "Imagination Technologies"),
                                                          ReadAssertion(read_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "Imagination Technologies"))],
-        
-        
+
+
         # Daemon observe test cases
         ["DaemonObserveStringResource",      (ReadAssertion(read_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "test"),
                                                    ObserveAssertion(observe_operation_assertions.CheckForSuccess, "/1000/0/202", AwaResourceType.String, "test2", True), )], 
-        
-        
+
+
         # Delete object instance cases
         ["DaemonDeleteOptionalObjectInstance",               (DeleteAssertion(server_delete_assertions.CheckForSuccess, "/1000/0"), 
                                                               DeleteAssertion(server_delete_assertions.CheckForMethodNotAllowed, "/1000/0"), )],
         ["DaemonDeleteNonExistentObjectInstance",            (DeleteAssertion(server_delete_assertions.CheckForMethodNotAllowed, "/1000/1"), )],
-        
+
         # Daemon subscribe to execute test cases
         ############################################################################
         # Subscribe to Execute - executed through Awa Server
@@ -165,6 +165,6 @@ class CustomObjectTestCases(GWServerAndClientTestCase):
         #                                                   ObserveAssertion(observe_operation_assertions.CheckForSuccess, "/1000/0/102", AwaResourceType.String, "test2", True), ))),
         #############################################################################
     ], testcase_func_name=noseParameterisedTestNameGenerator)
-    
+
     def test(self, name, assertions):
         test_assertions.callAssertions(self, assertions)
