@@ -23,6 +23,7 @@
 import cPickle as pickle
 import binascii
 import os
+import os.path
 
 from framework import awa_enums
 from framework.awa_enums import AwaResourceType
@@ -48,13 +49,18 @@ class GWClientXmlRpc(GatewayClient, GatewayXmlRpc):
 
         print ("Executing GWClientXmlRpc class constructor from: " + os.getcwd())
 
+        pskIdentityFile = './pskIdentity'
+        pskKeyFile = './pskKey'
+        
         # Read PSK credentials
         pskIdentity = None
         pskKey = None
-        with open('pskIdentity', 'r') as identityFile:
-            pskIdentity=identityFile.read().replace('\n', '')
-        with open('pskKey', 'r') as keyFile:
-            pskKey=keyFile.read().replace('\n', '')
+        
+        if os.path.isfile(pskIdentityFile) and os.path.isfile(pskKeyFile):
+            with open(pskIdentityFile, 'r') as identityFile:
+                pskIdentity=identityFile.read().replace('\n', '')
+            with open(pskKeyFile, 'r') as keyFile:
+                pskKey=keyFile.read().replace('\n', '')
 
         self._clientConfig = clientConfig
         self._xmlrpcSession.setDaemonPath(test_config.config['paths']['awa-clientd'])
