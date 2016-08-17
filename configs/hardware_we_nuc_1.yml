@@ -86,7 +86,8 @@ gateway-clients:
     ipc-address: 127.0.0.1
     ipc-port: 12345
     log: gateway_client_we-nuc-1.log
-    bootstrap-uri: coaps://we-nuc-1.we.imgtec.org:15684
+    # bootstrap-uri: coaps://we-nuc-1.we.imgtec.org:15684
+    bootstrap-uri: coaps://192.168.149.19:15684
     proxy: ci40-gateway-client
     object-definitions-file: /mnt/qa/AwaLWM2M/tools/tests/object-defs-tools-test.xml
 
@@ -121,7 +122,8 @@ proxies:
 
 device-servers:
   we-nuc-1:
-    uri: http://we-nuc-1.we.imgtec.org
+    # uri: http://we-nuc-1.we.imgtec.org
+    uri: http://192.168.149.19
     port: 80
     verify-ssl-certificate: true
   localhost:
