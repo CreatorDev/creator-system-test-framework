@@ -89,7 +89,7 @@ gateway-clients:
     # bootstrap-uri: coaps://we-nuc-1.we.imgtec.org:15684
     bootstrap-uri: coaps://192.168.149.19:15684
     proxy: ci40-gateway-client
-    object-definitions-file: /mnt/qa/AwaLWM2M/tools/tests/object-defs-tools-test.xml
+    object-definitions-file: /mnt/qa/DeviceManagementTests/AwaLWM2M/tools/tests/object-defs-tools-test.xml
 
 constrained-clients:
   ci40:
