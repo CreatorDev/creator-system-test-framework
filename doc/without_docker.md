@@ -13,14 +13,19 @@ to not be able to access the cloud. Docker is recommended.
 
  1) Clone this repository as well as its submodules.
 
-    $ git clone --recursive https://github.com/CreatorDev/creator-system-test-framework.git
+    $ git clone --recursive https://github.com/CreatorDev/creator-system-test-framework.git DeviceManagementTests
 
  2) Build the AwaLWM2M development suite in a directory of your choice by following the instructions in the readme.
+
+    $ cd DeviceManegementTests/AwaLWM2M
+    $ make
+    $ cd ..
  
  3) Build the minimal-net Contiki client:
     
-    cd DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test
-    make TARGET=minimal-net
+    $ cd lwm2m-contiki/lwm2m-client-contiki-test
+    $ make TARGET=minimal-net
+    $ cd ../..
 
  4) Ensure configs/local.yml (or copy it and create your own) contains the correct paths to your LWM2M repository, and change the following constants:
     
@@ -33,8 +38,8 @@ to not be able to access the cloud. Docker is recommended.
     
  6) Install Tayga:
  
-    $ apt-get install tayga
-    $ sudo mkdir /var/db
+    $ sudo apt-get install tayga
+    $ sudo mkdir -p /var/db
 
 
 ### Running the Test Framework
@@ -51,4 +56,4 @@ to not be able to access the cloud. Docker is recommended.
 
  Run the tests with:
 
-    PYTHONPATH=../FlowCorePythonAPI/:.:$PYTHONPATH ./noserunner.py -svv --tc-file configs/local.yml
+    $ PYTHONPATH=../FlowCorePythonAPI/:.:$PYTHONPATH ./noserunner.py -svv --tc-file configs/local_simulated.yml
