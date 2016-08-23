@@ -59,4 +59,4 @@ Note: the instructions below are assuming an Ubuntu host.
 
  Run the tests with:
 
-    $ PYTHONPATH=../FlowCorePythonAPI/:.:$PYTHONPATH ./noserunner.py -svv --tc-file configs/local_simulated.yml
+    $ PYTHONPATH=.:$PYTHONPATH ./noserunner.py -svv --tc-file configs/local_simulated.yml
