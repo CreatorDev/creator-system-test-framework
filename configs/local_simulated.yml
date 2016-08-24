@@ -1,10 +1,10 @@
 paths:
-  libawa: ../AwaLWM2M/build/api/src/libawa.so
-  awa-clientd: ../AwaLWM2M/build/core/src/client/awa_clientd
-  awa-serverd: ../AwaLWM2M/build/core/src/server/awa_serverd
-  awa-bootstrapd: ../AwaLWM2M/build/core/src/bootstrap/awa_bootstrapd
-  constrained-client: ../lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.minimal-net
-  tayga-scripts: ../lwm2m-contiki/scripts
+  libawa: AwaLWM2M/build/api/src/libawa.so
+  awa-clientd: AwaLWM2M/build/core/src/client/awa_clientd
+  awa-serverd: AwaLWM2M/build/core/src/server/awa_serverd
+  awa-bootstrapd: AwaLWM2M/build/core/src/bootstrap/awa_bootstrapd
+  constrained-client: lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.minimal-net
+  tayga-scripts: lwm2m-contiki/scripts
 
 topologies:
   local-gateways:
