@@ -1,12 +1,14 @@
-![](images/img.png)
+![Imagination Technologies Limited logo](images/img.png)
 
 ----
 
-# Creator System Test Framework
+## Creator System Test Framework
 
-## Test Framework Requirements
+----
 
-The QA Device Management End-To-End Test Framework was developed to satisfy the following requirements, in order to confidently assure expected functionality:
+### Test Framework Requirements
+
+The Creator System Test Framework was developed to satisfy the following requirements, in order to confidently assure expected functionality:
 
 * Written tests must be linked to an existing test plan, ensuring there are no discrepancies between what was intended to be tested and what actually is.
 * A way to quickly see what is being tested at a high level, without any knowledge of the test system, digging into written test cases or relying upon the names of those passing/failing test cases.

@@ -1,12 +1,14 @@
-![](images/img.png)
+![Imagination Technologies Limited logo](images/img.png)
 
 ----
 
-# Creator System Test Framework
+## Creator System Test Framework
 
-## Test Framework Components
+----
 
-### TestLink
+### Test Framework Components
+
+#### TestLink
 
 TestLink is a web-based test management system that allows team members to collaborate in real-time on a the test plan, and track results as they occur. It is an open-source solution that fills the gap between the test plan and the test framework, allowing users to execute tests and view test reports that match the test plan they have written, all from a single application.
 
@@ -14,7 +16,7 @@ TestLink allows anyone to see exactly what is being tested at a high level. With
 
 Jenkins uses a TestLink plugin that allows it to gather tests from TestLink, execute them, then pass the results back to TestLink so that reports can be generated and saved for future reference.
 
-### Docker
+#### Docker
 
 As the test framework becomes more complex, running tests locally without container management and deployment systems will become difficult. Forcing users to run and debug tests remotely through Jenkins is not a maintainable process.
 
@@ -34,7 +36,7 @@ This maximises reproducibility and minimises the potential for human error. User
 
 Docker also has the potential to host entire web services, meaning it supports the full simulation of an end-to-end solution.
 
-### Nose
+#### Nose
 
 The standard python unittest module is a great base for the Test Framework, but lacks standard and user-friendly solutions for:
 
@@ -48,6 +50,6 @@ Nose builds upon unittest and solves the above issues, while still outputting te
 
 Nose supports custom plugins. The test framework takes advantage of this to load configuration files and record version numbers of each running component. Version numbers for each of the components are printed at the top of the test result output so that TestLink is able to mark changes to the system in its generated reports.
 
-The test framework uses a modified Nose configuration loader plugin, allowing a YAML configuration file to be passed to the test launcher. This allows us to define our test environment - paths to libraries, executables and scripts, and topologies of components required for different test cases. YAML was chosen as the file format as it supports configuration hierarchies that can easily be accessed from within the test framework itself. The default YAML file used by the test framework is configs/docker.yml.
+The test framework uses a modified Nose configuration loader plugin, allowing a YAML configuration file to be passed to the test launcher. This allows us to define our test environment - paths to libraries, executables and scripts, and topologies of components required for different test cases. YAML was chosen as the file format as it supports configuration hierarchies that can easily be accessed from within the test framework itself. The default YAML file used by the test framework is configs/docker_simulated.yml.
 
 Data-driven tests minimise duplicated code. This is useful when implementing tests on standard LWM2M objects, of which there are many. Nose provides a way for tests to run from data tables, where each table entry contains a test name and list of parameters for a single instance of the parameterised test.
