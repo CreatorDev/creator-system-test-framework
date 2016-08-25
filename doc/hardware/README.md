@@ -73,16 +73,13 @@ Install the following dependencies that are required by the system test framewor
     $ sudo systemctl start nfs-kernel-server.service
 
 Clone the DeviceManagementTests repository into the directory you wish to be mounted by the gateway device.
-You may need to generate an ssh key pair and add the public key part as a deploy key to gitlab.
 If not using the default key name, follow the guide [here](http://stackoverflow.com/questions/4565700/specify-private-ssh-key-to-use-when-executing-shell-command-with-or-without-ruby/11251797#11251797) 
 to enable your private key.
 
     $ cd /mnt/qa
-    $ git clone git@gitlab.flowcloud.systems:FlowCloudTestTeam/DeviceManagementTests.git
-    $ git clone --recursive git@gitlab.flowcloud.systems:FlowM2M/lwm2m-contiki.git
-    $ (cd lwm2m-contiki/contiki && git checkout avrdude-mikro-e-no-local-echo)
-    $ git clone git@gitlab.flowcloud.systems:FlowCloudTestTeam/FlowCorePythonAPI.git
+    $ git clone --recursive https://github.com/CreatorDev/creator-system-test-framework.git DeviceManagementTests
     $ cd DeviceManagementTests
+    $ (cd lwm2m-contiki/contiki && git checkout avrdude-mikro-e-no-local-echo)
     $ pip install -r requirements.txt
     
 
