@@ -4,3 +4,6 @@
 [submodule "lwm2m-contiki"]
 	path = lwm2m-contiki
 	url = https://github.com/CreatorDev/lwm2m-contiki.git
+[submodule "DeviceServer"]
+	path = DeviceServer
+	url = https://github.com/CreatorDev/DeviceServer.git
