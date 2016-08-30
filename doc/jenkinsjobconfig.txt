@@ -1,0 +1,191 @@
+###########################################################
+##                                                       ##
+## Example jenkins job config for running Test Framework ##
+##                                                       ##
+###########################################################
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute Shell
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+GW_IP="192.168.149.211"
+HOST_IP="192.168.149.19"
+
+
+####### Select OpenWRT Image Source #######
+
+# Publicly accessible image in GitHub
+BASE_IMAGE_FILENAME=openwrt-r48420-pistachio-marduk-marduk_cc2520-ubifs.img
+BASE_IMAGE_URL=https://github.com/CreatorDev/creator-test-framework_openwrt-base/raw/master/$BASE_IMAGE_FILENAME
+
+###########################################
+
+
+# Generate random organisation-0 credentials for Device Server
+DEVICESERVER_ORG0_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1)
+DEVICESERVER_ORG0_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1)
+
+# TODO call script here, passing above as parameters
+
+#ssh root@$GW_IP 'if [ ! -z "$(mount | grep /mnt/qa)" ]; then umount /mnt/qa; fi'
+
+
+echo "Getting base image..."
+wget -N $BASE_IMAGE_URL
+scp $BASE_IMAGE_FILENAME root@$GW_IP:/tmp
+
+echo "Executing sysupgrade..."
+ssh root@$GW_IP sysupgrade -v /tmp/$BASE_IMAGE_FILENAME &
+
+set +x
+echo "Waiting for gateway to shut down..."
+while true; do !(ping -c1 $GW_IP > /dev/null) && break; done
+echo "Waiting for gateway to reboot..."
+while true; do ping -c1 $GW_IP > /dev/null && break; done
+set -x
+
+
+echo "Setting up gateway..."
+
+mkdir -p logs
+chmod 777 logs
+
+# Add remote changes not yet merged into the libobjects main line
+cd DeviceManagementTests/lwm2m-contiki/libobjects
+git checkout libobjects-fixes
+
+
+# Add remote changes not yet merged from avrdude-mikro-e-no-local-echo branch
+cd ../contiki
+git checkout avrdude-mikro-e-no-local-echo
+
+
+# Build lwm2m-client-contiki-test app for the constrained device
+cd ../lwm2m-client-contiki-test
+make TARGET=mikro-e clean
+make TARGET=mikro-e BOOT=0
+cd ../../..
+
+# Build and start local DeviceServer test environment
+export DEVICESERVER_HOSTNAME=$HOST_IP
+cd DeviceManagementTests/DeviceServer
+
+mkdir -p  docker/ssl
+cp /home/certs/star_flowcloud_systems_certchain.pem docker/ssl/cert.pem
+cp /home/certs/star_flowcloud_systems_privkey.pem docker/ssl/key.pem
+
+#docker-compose pull    # consider switching to this (instead of compose 'up') only if registry is 'close' (in a network sense) to the jenkins slave.
+docker-compose up -d
+chmod ug+x ./ci/deviceserver-wait.sh
+./ci/deviceserver-wait.sh "http://localhost:80"
+echo "Docker environment status:"
+docker ps --format "Container-{{.ID}}:\t{{.Status}}\t\t{{.Names}}"
+
+# Setup temporary Organisation-0 credentials for Device Server
+docker exec deviceserver_mongo_1 mongo localhost/Organisations --eval 'db.AccessKey.insert({"_id":"'$DEVICESERVER_ORG0_KEY'", "OrganisationID": NumberInt(0), "Name": "SystemTests", "Secret": "'$DEVICESERVER_ORG0_SECRET'"})'
+
+cd ../..
+
+
+###############################################################################
+# Login to the Gateway Device and prepare to run tests
+#
+# - Install dependencies
+# - Mount Test Framework directory on host via NFS
+# - Setup firewall
+# - Generate an access key/secret pair for device-server test clients
+# - Start helpers
+# - Program test-client firmware into constrained device
+#
+cd DeviceManagementTests
+ssh root@$GW_IP opkg update
+ssh root@$GW_IP opkg install python python-pip python-enum34 python-pyserial python-yaml \
+pickle minicom nfs-utils coreutils-stty \
+kmod-usb-serial-ftdi kmod-fs-nfs kmod-fs-nfs-common awalwm2m
+
+ssh root@$GW_IP 'if [ -z "$(mount | grep /mnt/qa)" ]; then mkdir -p /mnt/qa; mount -t nfs '$HOST_IP':"'$WORKSPACE'" /mnt/qa -o nolock; fi'
+
+
+# Create REST API access key and PSK identity/key pair for clients
+cd scripts
+./create_access_key.sh "http://localhost:80" $DEVICESERVER_ORG0_KEY $DEVICESERVER_ORG0_SECRET
+mv accessKey accessSecret pskIdentity pskKey ../../
+cd ..
+
+ssh root@$GW_IP ash /mnt/qa/DeviceManagementTests/hardware/jenkins.pre-iterate-ci40 $GW_IP '/mnt/qa/DeviceManagementTests'
+
+# TODO run "ash proxy-ctrl.sh start"
+
+cd ..
+
+
+cp accessKey accessSecret pskIdentity pskKey ./DeviceManagementTests
+
+###############################################################################
+
+
+# Pre-populate LWM2M object metadata
+cd DeviceManagementTests/DeviceServer/scripts
+chmod ug+x ./register-definitions.sh
+./register-definitions.sh "http://localhost:80" $DEVICESERVER_ORG0_KEY $DEVICESERVER_ORG0_SECRET
+cd ../../..
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute Shell
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DeviceManagementTests/docker/jenkins.pre-iterate clean Dockerfile.test-env-hardware
+DeviceManagementTests/docker/jenkins.pre-iterate Dockerfile.test-env-hardware
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute Shell: Test Execution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DeviceManagementTests/docker/jenkins.iterate $TESTLINK_TESTCASE_TESTCASE_IDENTIFIER
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute Shell 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bash -x DeviceManagementTests/docker/jenkins.post-iterate docker/entry-base.sh configs/hardware_we_nuc_1.yml
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Execute Shell
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GW_IP="192.168.149.211"
+HOST_IP="192.168.149.19"
+
+set +x
+echo "Stopping helpers..."
+ssh root@$GW_IP killall python
+
+# TODO run "ash proxy-ctrl.sh stop"
+
+echo "Stopping local DeviceServer test environment..."
+export DEVICESERVER_HOSTNAME=$HOST_IP
+cd DeviceServer
+docker-compose down
+cd ..
+set -x
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
