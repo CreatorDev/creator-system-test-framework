@@ -1,0 +1,8 @@
+*.pyc
+test-reports/*
+*.log
+.cache
+results/*
+nose.cfg
+.pid.*
+flowcore_local_storage/*
