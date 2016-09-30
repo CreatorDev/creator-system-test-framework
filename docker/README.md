@@ -79,7 +79,7 @@
 
  Run all the tests in a Docker container based on the image created in the previous step:
 
-    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged --workdir /home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker.yml
+    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged --workdir /home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker_simulated.yml
 
  This creates a Docker container with the name test-env-container that runs the Python Test Framework. After the tests complete
  the container has a residual filesystem which needs to be deleted before running the tests again.
@@ -116,15 +116,15 @@
 
 #### Running all the tests with an external version of the Python Test Framework
 
-    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged -v $(pwd)/DeviceManagementTests:/home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker.yml
+    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged -v $(pwd)/DeviceManagementTests:/home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker_simulated.yml
 
 #### Running a single test using docker: tests/test_filename.py:TestClass.test_name
 
-    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged -v $(pwd)/DeviceManagementTests:/home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker.yml tests/test_GWServerCustomObjectTestCases.py:CustomObjectTestCases.test_DaemonReadStringArrayResourceDefaultValue
+    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged -v $(pwd)/DeviceManagementTests:/home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker_simulated.yml tests/test_GWServerCustomObjectTestCases.py:CustomObjectTestCases.test_DaemonReadStringArrayResourceDefaultValue
 
 #### Running tests with a filter using docker (using the nose attributes plugin):
 
-    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged -v $(pwd)/DeviceManagementTests:/home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker.yml -A 'cloud'
+    $ docker run -it --cap-add=NET_ADMIN --device=/dev/net/tun --privileged -v $(pwd)/DeviceManagementTests:/home/user/DeviceManagementTests --name test-env-container test-env docker/entry.sh -svv --tc-file configs/docker_simulated.yml -A 'cloud'
 
 ### Executing another process in a running docker container
 
