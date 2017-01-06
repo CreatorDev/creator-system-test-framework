@@ -1,4 +1,4 @@
-FROM registry-hh.flowcloud.systems:5000/flowm2m/system-test-base
+FROM creatordev/system-test-base
 
 # packages required for test scripts
 USER root
@@ -10,16 +10,16 @@ USER user
 ENV SOURCES $HOME
 
 # install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
-ADD requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
+ADD requirements.txt $SOURCES/creator-system-test-framework/requirements.txt
 USER user
-RUN pip install -r $SOURCES/DeviceManagementTests/requirements.txt
+RUN pip install -r $SOURCES/creator-system-test-framework/requirements.txt
 
 USER root
 
 # copy in Test Framework
-RUN mkdir -p $SOURCES/DeviceManagementTests
-COPY ./* $SOURCES/DeviceManagementTests/
-RUN chown user:user -R $SOURCES/DeviceManagementTests
+RUN mkdir -p $SOURCES/creator-system-test-framework
+COPY ./* $SOURCES/creator-system-test-framework/
+RUN chown user:user -R $SOURCES/creator-system-test-framework
 
 # copy in psk identity for client daemon
 COPY accessKey $SOURCES/accessKey
@@ -28,9 +28,9 @@ COPY pskIdentity $SOURCES/pskIdentity
 COPY pskKey $SOURCES/pskKey
 RUN chown user:user -R $SOURCES/accessKey
 RUN chown user:user -R $SOURCES/accessSecret
-RUN chown user:user -R $SOURCES/pskIdentity 
+RUN chown user:user -R $SOURCES/pskIdentity
 RUN chown user:user -R $SOURCES/pskKey
 
-# start containers in SOURCES/DeviceManagementTests by default
-WORKDIR $SOURCES/DeviceManagementTests
+# start containers in SOURCES/creator-system-test-framework by default
+WORKDIR $SOURCES/creator-system-test-framework
 

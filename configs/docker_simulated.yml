@@ -1,0 +1,183 @@
+paths:
+  libawa: /lib/libawa.so
+  awa-clientd: /bin/awa_clientd
+  awa-serverd: /bin/awa_serverd
+  awa-bootstrapd: /bin/awa_bootstrapd
+  constrained-client: /home/user/lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.minimal-net
+  tayga-scripts: /home/user/lwm2m-contiki/scripts
+
+topologies:
+  cloud-only-uat-hobbyist:
+    # For user creation / deletion tests
+    cloud-tenant: hobbyist
+    cloud-server: uat
+  local-gateways:
+    # Gateway client/server interaction - No provisioning
+    bootstrap-servers: local
+    gateway-servers: local
+    gateway-clients: local
+  cloud-client-uat-hobbyist:
+    # Basic gateway client provisioning
+    cloud-tenant: hobbyist
+    cloud-server: uat
+    gateway-clients: uat-hobbyist
+  constrained-device-without-gateway-client-uat-hobbyist:
+    # Basic constrained-device provisioning
+    cloud-tenant: hobbyist
+    cloud-server: uat
+    bootstrap-servers: contiki
+    gateway-servers: contiki
+    constrained-clients: local
+  constrained-device-uat-hobbyist:
+    # Creator-kit style provisioning of both gateway and constrained clients
+    cloud-tenant: hobbyist
+    cloud-server: uat
+    bootstrap-servers: contiki
+    gateway-servers: contiki
+    #gateway-clients: uat-hobbyist-with-contiki
+    constrained-clients: local
+  constrained-device-without-gateways-uat-hobbyist:
+    # Basic constrained-device provisioning
+    cloud-tenant: hobbyist
+    cloud-server: uat
+    bootstrap-servers: contiki-without-gateway-server
+    constrained-clients: local
+  constrained-device-only:
+    constrained-clients: local
+
+bootstrap-servers:
+  local:
+    config: bootstrap-configs/bootstrap-localhost.config
+    ip-address: 127.0.0.1
+#    interface: null
+#    address-family: null
+    port: 15685
+    log: gwbootstrapd.log
+    proxy: local-bootstrap-server
+  contiki:
+    config: bootstrap-configs/bootstrap-contiki.config
+    config2: bootstrap-configs/bootstrap-contiki-flow-NAT64.config
+    ip-address: 127.0.0.1
+    port: 15683
+    log: gwbootstrapd.log
+    proxy: local-bootstrap-server
+    address-family: 6
+    interface: tap0
+  contiki-without-gateway-server:
+    #config: bootstrap-configs/bootstrap-contiki.config
+    config: bootstrap-configs/bootstrap-contiki-flow-NAT64.config
+    ip-address: 127.0.0.1
+    port: 15683
+    log: gwbootstrapd.log
+    proxy: local-bootstrap-server
+    address-family: 6
+    interface: tap0
+
+gateway-servers:
+  local:
+    ip-address: 127.0.0.2
+    port: 5683
+    ipc-address: 127.0.0.2
+    ipc-port: 54321
+#    interface: null
+#    address-family: null
+    log: gateway_server_local.log
+    content-type: 1542
+    proxy: local-gateway-server
+  contiki:
+    ip-address: 127.0.0.2
+    port: 5683
+    ipc-address: 127.0.0.2
+    ipc-port: 54321
+    interface: tap0
+    address-family: 6
+    log: gateway_server_local.log
+    content-type: 1542
+    proxy: local-gateway-server
+
+gateway-clients:
+  local:
+    client-id: test_local_client
+    device-name: TestGatewayDevice1
+    port: 6000
+    address-family: 4
+    ipc-address: 127.0.0.1
+    ipc-port: 12345
+    log: gateway_client_local.log
+    bootstrap-uri: coap://127.0.0.1:15685
+    proxy: local-gateway-client
+  uat-hobbyist:
+    client-id: test_cloud_client
+    device-name: TestGatewayDevice1
+    port: 6001
+    address-family: 4
+    ipc-address: 127.0.0.1
+    ipc-port: 12346
+    log: gateway_client_cloud.log
+    factory-bootstrap-config: bootstrap-configs/bootstrap-flowcloud.config
+    proxy: local-gateway-client
+  we-dev-img-sales:
+    client-id: test_cloud_client
+    device-name: TestGatewayDevice1
+    port: 6001
+    address-family: 4
+    ipc-address: 127.0.0.1
+    ipc-port: 12346
+    log: gateway_client_cloud.log
+    factory-bootstrap-config: bootstrap-configs/bootstrap-we-test.config
+    proxy: local-gateway-client
+
+constrained-clients:
+  local:
+    simulated: true
+    client-id: constrained1
+    device-name: TestConstrainedDevice1
+    serial-number: SN12345678CD
+    bootstrap-uri: coap://[2001:1418:100::1]:15683
+    port: 6007
+    proxy: local-constrained-client
+    tayga:
+      ip-address: aaaa::1
+      ethif: eth0
+
+proxies:
+  local-bootstrap-server:
+    protocol: XMLRPC
+    ip-address: 127.0.0.1
+    port: 4442
+  local-gateway-server:
+    protocol: XMLRPC
+    ip-address: 127.0.0.1
+    port: 4342
+  local-gateway-client:
+    protocol: XMLRPC
+    ip-address: 127.0.0.1
+    port: 4242
+  local-constrained-client:
+    protocol: XMLRPC
+    ip-address: 127.0.0.1
+    port: 4142
+
+cloud-servers:
+  uat:
+    uri: https://ws-uat.flowworld.com
+    verify-ssl-certificate: true
+    customer-key: Ph3bY5kkU4P6vmtT
+    customer-secret: Sd1SVBfYtGfQvUCR
+  we-test:
+    uri: https://test-ws.we.imgtec.org
+    verify-ssl-certificate: false
+    customer-key: w_DelzN3ZiBqTEST
+    customer-secret: 5jRwqwWc0Pv1TEST
+
+cloud-tenants:
+  hobbyist:
+    user-requires-activation: false
+    licensee-id: 17
+    licensee-secret: getATTtDsNBpBRnMsN7GoQ==
+    device-type: FlowGateway
+  img-sales:
+    user-requires-activation: true
+    licensee-id: 7
+    licensee-secret: getATTtDsNBpBRnMsN7GoQ==
+    device-type: FlowGateway

@@ -1,28 +1,25 @@
 ![Imagination Technologies Limited logo](images/img.png)
 
-----
+# Creator System Test Framework
 
-## Creator System Test Framework
+## Set up TestLink
 
-----
-
-### Set up TestLink
 TODO -- notes on setting up TestLink server, jenkins TestLink plugin.
 
-### Create a new test case within TestLink
+## Create a new test case within TestLink
 
-#### Log in to TestLink
+### Log in to TestLink
 
 In your browser navigate to the test link configuration page.
 
 ![login](login.png)
 
-Enter your login details, if you don't already have an account click on the "New User?" link and
-create a new account.
+Enter your login details, if you don't already have an account click on the "New User?" link
+and create a new account.
 
 The dashboard screen should now be displayed.
 
-#### Creating a new test case
+### Creating a new test case
 
 Select the "Test Specification" link, located at the bottom left of the page.
 
@@ -30,8 +27,8 @@ Select the "Test Specification" link, located at the bottom left of the page.
 
 On the Test Specification page there is a tree that lists all of the test cases.
 
-Select the position in the tree where you wish to create your new test case. for example, to create a new smoke test
-you would select the "Smoke" folder icon.
+Select the position in the tree where you wish to create your new test case. for example,
+to create a new smoke test you would select the "Smoke" folder icon.
 
 ![test_spec_tree](test_spec_tree.png)
 
@@ -63,7 +60,7 @@ Click the testlink logo to return back to the dashboard.
 
 ![testlink](testlink.png)
 
-#### Add your new Testcase to the Testplan
+### Add your new Testcase to the Testplan
 
 From the dash board, select the test plan from the drop down box and click ok.
 
@@ -82,6 +79,3 @@ Click the Add selected button.
 ![add_test_case_list](add_test_case_list.png)
 
 Your new testcase will now be picked up on the next test run executed by jenkins.
-
-
-

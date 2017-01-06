@@ -1,13 +1,14 @@
-FROM flowm2m/test-base
+FROM test-env
 
 # copy in Awa contiki application
 USER root
-COPY DeviceManagementTests/lwm2m-contiki $HOME/DeviceManagementTests/lwm2m-contiki
-RUN chown user:user -R $HOME/DeviceManagementTests/lwm2m-contiki
+COPY creator-system-test-framework/lwm2m-contiki $HOME/creator-system-test-framework/lwm2m-contiki
+RUN chown user:user -R $HOME/creator-system-test-framework/lwm2m-contiki
 
 # build Awa contiki application
 USER user
-RUN cd DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test && make TARGET=minimal-net
+WORKDIR $HOME
+RUN make -C creator-system-test-framework/lwm2m-contiki/lwm2m-client-contiki-test TARGET=minimal-net
 
 # packages needed for contiki
 USER root
@@ -19,6 +20,6 @@ RUN apt-get update -yq && apt-get install -yq \
 # copy binaries and scripts to /awa
 USER root
 RUN mkdir -p /awa/bin
-RUN cp DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.minimal-net /awa/bin
-RUN cp -r DeviceManagementTests/lwm2m-contiki/scripts /awa
+RUN cp creator-system-test-framework/lwm2m-contiki/lwm2m-client-contiki-test/lwm2m-client-contiki-test.minimal-net /awa/bin
+RUN cp -r creator-system-test-framework/lwm2m-contiki/scripts /awa
 
