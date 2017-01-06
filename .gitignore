@@ -6,3 +6,5 @@ results/*
 nose.cfg
 .pid.*
 flowcore_local_storage/*
+.vscode/*
+!.vscode/extensions.json

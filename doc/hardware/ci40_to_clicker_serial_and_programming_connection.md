@@ -1,12 +1,8 @@
 ![Imagination Technologies Limited logo](../images/img.png)
 
-----
+# Creator System Test Framework
 
-## Creator System Test Framework
-
-----
-
-### Mikro-E 6LoWPAN Clicker <--> Ci40 Programming and serial port connection diagram #
+## Mikro-E 6LoWPAN Clicker <--> Ci40 Programming and serial port connection diagram
 
 ```
 Ci40 Raspberry Pi interface                             Mikro-E 6LoWPAN Clicker
@@ -38,8 +34,8 @@ UART2TX |8  -------------|---\                  |
                                                               X-| 8 | NC
                                                                 \---/
                                                                  8-way 1.25mm pitch SIP connector
-                                                                 
-                                                                 
+
+
 -----------------------------------------------------------------------------------------------------------------------
 |           |    Raspberry Pi connector              6LowPan clicker                                                  |
 |           |                                        PicKit3 ICSPInterfacer Pin               MikroBUS connector pin  |

@@ -54,7 +54,7 @@ mkdir -p logs
 chmod 777 logs
 
 # Add remote changes not yet merged into the libobjects main line
-cd DeviceManagementTests/lwm2m-contiki/libobjects
+cd creator-system-test-framework/lwm2m-contiki/libobjects
 git checkout libobjects-fixes
 
 
@@ -71,7 +71,7 @@ cd ../../..
 
 # Build and start local DeviceServer test environment
 export DEVICESERVER_HOSTNAME=$HOST_IP
-cd DeviceManagementTests/DeviceServer
+cd creator-system-test-framework/DeviceServer
 
 mkdir -p  docker/ssl
 cp /home/certs/star_flowcloud_systems_certchain.pem docker/ssl/cert.pem
@@ -100,7 +100,7 @@ cd ../..
 # - Start helpers
 # - Program test-client firmware into constrained device
 #
-cd DeviceManagementTests
+cd creator-system-test-framework
 ssh root@$GW_IP opkg update
 ssh root@$GW_IP opkg install python python-pip python-enum34 python-pyserial python-yaml \
 pickle minicom nfs-utils coreutils-stty \
@@ -115,20 +115,20 @@ cd scripts
 mv accessKey accessSecret pskIdentity pskKey ../../
 cd ..
 
-ssh root@$GW_IP ash /mnt/qa/DeviceManagementTests/hardware/jenkins.pre-iterate-ci40 $GW_IP '/mnt/qa/DeviceManagementTests'
+ssh root@$GW_IP ash /mnt/qa/creator-system-test-framework/hardware/jenkins.pre-iterate-ci40 $GW_IP '/mnt/qa/creator-system-test-framework'
 
 # TODO run "ash proxy-ctrl.sh start"
 
 cd ..
 
 
-cp accessKey accessSecret pskIdentity pskKey ./DeviceManagementTests
+cp accessKey accessSecret pskIdentity pskKey ./creator-system-test-framework
 
 ###############################################################################
 
 
 # Pre-populate LWM2M object metadata
-cd DeviceManagementTests/DeviceServer/scripts
+cd creator-system-test-framework/DeviceServer/scripts
 chmod ug+x ./register-definitions.sh
 ./register-definitions.sh "http://localhost:80" $DEVICESERVER_ORG0_KEY $DEVICESERVER_ORG0_SECRET
 cd ../../..
@@ -140,8 +140,8 @@ cd ../../..
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute Shell
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# DeviceManagementTests/docker/jenkins.pre-iterate clean Dockerfile.test-env-hardware
-DeviceManagementTests/docker/jenkins.pre-iterate Dockerfile.test-env-hardware
+# creator-system-test-framework/docker/jenkins.pre-iterate clean Dockerfile.test-env-hardware
+creator-system-test-framework/docker/jenkins.pre-iterate Dockerfile.test-env-hardware
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -151,7 +151,7 @@ DeviceManagementTests/docker/jenkins.pre-iterate Dockerfile.test-env-hardware
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Execute Shell: Test Execution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-DeviceManagementTests/docker/jenkins.iterate $TESTLINK_TESTCASE_TESTCASE_IDENTIFIER
+creator-system-test-framework/docker/jenkins.iterate $TESTLINK_TESTCASE_TESTCASE_IDENTIFIER
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -159,9 +159,9 @@ DeviceManagementTests/docker/jenkins.iterate $TESTLINK_TESTCASE_TESTCASE_IDENTIF
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Execute Shell 
+Execute Shell
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bash -x DeviceManagementTests/docker/jenkins.post-iterate docker/entry-base.sh configs/hardware_we_nuc_1.yml
+bash -x creator-system-test-framework/docker/jenkins.post-iterate docker/entry-base.sh configs/hardware_we_nuc_1.yml
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

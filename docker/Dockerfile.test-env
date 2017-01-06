@@ -1,4 +1,4 @@
-FROM registry-hh.flowcloud.systems:5000/flowm2m/system-test-base
+FROM creatordev/system-test-base
 
 # packages needed for contiki
 USER root
@@ -12,18 +12,18 @@ RUN apt-get update -yq && apt-get install -yq \
 ENV SOURCES $HOME
 
 # install Awa and Test Framework dependencies first, before copying main source, to avoid cache invalidation:
-ADD DeviceManagementTests/requirements.txt $SOURCES/DeviceManagementTests/requirements.txt
+ADD creator-system-test-framework/requirements.txt $SOURCES/creator-system-test-framework/requirements.txt
 USER user
 RUN pip install Mercurial
-RUN pip install -r $SOURCES/DeviceManagementTests/requirements.txt
+RUN pip install -r $SOURCES/creator-system-test-framework/requirements.txt
 
 # copy in Test framework and Awa sources
 USER root
-COPY DeviceManagementTests $SOURCES/DeviceManagementTests
-RUN chown user:user -R $SOURCES/DeviceManagementTests
+COPY creator-system-test-framework $SOURCES/creator-system-test-framework
+RUN chown user:user -R $SOURCES/creator-system-test-framework
 
 # build AwaLWM2M
-WORKDIR $SOURCES/DeviceManagementTests/AwaLWM2M
+WORKDIR $SOURCES/creator-system-test-framework/AwaLWM2M
 USER root
 RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 
@@ -31,10 +31,10 @@ RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF"
 #RUN make install CMAKE_OPTIONS="-DBUILD_TESTS=OFF" DESTDIR=/awa
 
 # build Awa contiki application
-WORKDIR $SOURCES/DeviceManagementTests/lwm2m-contiki/lwm2m-client-contiki-test
+WORKDIR $SOURCES/creator-system-test-framework/lwm2m-contiki/lwm2m-client-contiki-test
 RUN make TARGET=minimal-net
 RUN mkdir -p /var/db
 
-# start containers in SOURCES/DeviceManagementTests by default
-WORKDIR $SOURCES/DeviceManagementTests
+# start containers in SOURCES/creator-system-test-framework by default
+WORKDIR $SOURCES/creator-system-test-framework
 

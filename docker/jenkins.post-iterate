@@ -15,10 +15,10 @@
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #************************************************************************************************************************/
 
@@ -37,7 +37,7 @@ fi
 if [ -z "$CONFIG_FILE" ]
   then
     echo "No config file supplied, using default"
-    CONFIG_FILE=configs/docker.yml
+    CONFIG_FILE=configs/docker_simulated.yml
 fi
 
 echo "Using entry script: $ENTRY_SCRIPT"
@@ -60,25 +60,20 @@ COMMAND="$ENTRY_SCRIPT -svv \
 # create the container:
 docker create -it \
 	   --cap-add=NET_ADMIN --device=/dev/net/tun --privileged \
-	   --workdir /home/user/DeviceManagementTests \
+	   --workdir /home/user/creator-system-test-framework \
 	   --name test-env-container \
 	   test-env \
 	   $COMMAND
 
 # copy nosetests config.cfg to container:
-docker cp DeviceManagementTests/nose.cfg test-env-container:/home/user/DeviceManagementTests
+docker cp creator-system-test-framework/nose.cfg test-env-container:/home/user/creator-system-test-framework
 
 # run container:
 # (if you run this manually, use -ai)
 docker start -a test-env-container || true
 
 # copy results out of container:
-docker cp test-env-container:/home/user/DeviceManagementTests/results results
-
-# archive the container:
-# TODO
-# docker tag test-env 
-# docker push test-env
+docker cp test-env-container:/home/user/creator-system-test-framework/results results
 
 # Remove container image
 docker rmi -f test-env:latest
