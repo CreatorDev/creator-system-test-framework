@@ -8,7 +8,10 @@ RUN chown user:user -R $HOME/creator-system-test-framework/lwm2m-contiki
 # build Awa contiki application
 USER user
 WORKDIR $HOME
-RUN make -C creator-system-test-framework/lwm2m-contiki/lwm2m-client-contiki-test TARGET=minimal-net
+
+ARG TINYDTLS
+ENV TINYDTLS ${TINYDTLS}
+RUN make -C creator-system-test-framework/lwm2m-contiki/lwm2m-client-contiki-test TARGET=minimal-net clean all
 
 # packages needed for contiki
 USER root

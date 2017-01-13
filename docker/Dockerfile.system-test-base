@@ -7,6 +7,7 @@ RUN apt-get update -yq && apt-get install -yq \
 	git \
 	curl \
 	make \
+	automake \
 	build-essential \
 	libssl-dev \
 	zlib1g-dev \
