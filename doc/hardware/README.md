@@ -22,8 +22,12 @@ with a constrained device over a serial cable.
 
 Choose instructions from one of the methods below to flash creator onto your gateway device.
 
-* Download a prebuilt creator OpenWRT image and install dependencies through OPKG (Currently unsupported)
-* Manually build creator on the host machine and flash the gateway device using Sysupgrade. [Instructions](doc/hardware/manually_building_creator.md)
+* Download a prebuilt creator OpenWRT image from[downloads server](http://downloads.creatordev.io/creator-openwrt/v2/pistachio/marduk/creatorci40-v1.1.0-2.ubi) and install dependencies through OPKG (Currently unsupported)
+
+	root@myCi40:opkg update
+	root@myCi40:opkg install kmod-fs-nfs
+
+* Manually build creator on the host machine and flash the gateway device using Sysupgrade. [Instructions](manually_building_creator.md)
 
 Make sure to record the IP address of the gateway device by typing:
 
@@ -99,8 +103,8 @@ following error:
 Follow one of the instructions below to flash the test app onto the constrained device.
 
 * Flashing the constrained device using the gateway device using
-  [Pickle](doc/hardware/flashing_constrained_device_from_gateway.md) (preferred).
-* Flashing the constrained device using the [host machine](doc/hardware/flashing_constrained_device_from_host.md)
+  [Pickle](flashing_constrained_device_from_gateway.md) (preferred).
+* Flashing the constrained device using the [host machine](flashing_constrained_device_from_host.md)
   (requires manually switching the serial cable connected to the constrained device between the host machine and
   gateway device).
 
