@@ -27,8 +27,8 @@ channel = int(sys.argv[1]) if len(sys.argv) > 1 else 26
 print("Setting WPAN Channel: %d" % (channel, ))
 
 filename = '/etc/config/network'
-old_prefix = "option 'channel' '26'"
-new_prefix = "option 'channel' '%d'" % (channel, )
+old_prefix = "option channel '26'"
+new_prefix = "option channel '%d'" % (channel, )
 
 s = open(filename).read()
 s = s.replace(old_prefix, new_prefix)
