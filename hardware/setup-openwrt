@@ -30,8 +30,9 @@ if [ -z "$CHANNEL" ]
     CHANNEL=26
 fi
 
-python fix-lan-prefix.py
-python set-wpan-channel.py $CHANNEL
+python3 fix-lan-prefix.py
+python3 set-wpan-channel.py $CHANNEL
+/etc/init.d/network restart
 ash open-helper-ports
 /etc/init.d/firewall restart
 
